@@ -16,8 +16,8 @@ for (const gid of gameIds) {
     const t = row.find('td');
     const data = {
       1x2: { home: +t.eq(2).text(), draw: +t.eq(3).text(), away: +t.eq(4).text() },
-      ah : { line: +t.eq(7).text(), home: +t.eq(8).text(), away: +t.eq(9).text() },
-      ou : { line: +t.eq(10).text(), over: +t.eq(11).text(), under: +t.eq(12).text() }
+      ah:  { line: +t.eq(7).text(), home: +t.eq(8).text(), away: +t.eq(9).text() },
+      ou:  { line: +t.eq(10).text(), over: +t.eq(11).text(), under: +t.eq(12).text() }
     };
     fs.writeFileSync(`${dir}/${gid}.json`, JSON.stringify(data, null, 2));
   } catch (e) {
