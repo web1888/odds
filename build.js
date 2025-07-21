@@ -21,5 +21,23 @@ for (const gid of gameIds) {
     fs.writeFileSync(`${dir}/${gid}.json`, JSON.stringify(data, null, 2));
   } catch (e) {
     fs.writeFileSync(`${dir}/${gid}.json`, JSON.stringify({ error: e.message }));
+ for (const gid of gameIds) {
+  try {
+    const response = await fetch(`https://live.nowscore.com/odds/match/${gid}.htm`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const html = await response.text();
+    const $ = cheerio.load(html);
+    const t = $('tr[data-companyid="8"]').find('td');
+    const data = {
+      "1x2": { home: parseFloat(t.eq(2).text()), draw: parseFloat(t.eq(3).text()), away: parseFloat(t.eq(4).text()) },
+      "ah":  { line: parseFloat(t.eq(7).text()), home: parseFloat(t.eq(8).text()), away: parseFloat(t.eq(9).text()) },
+      "ou":  { line: parseFloat(t.eq(10).text()), over: parseFloat(t.eq(11).text()), under: parseFloat(t.eq(12).text()) }
+    };
+    fs.writeFileSync(`${dir}/${gid}.json`, JSON.stringify(data, null, 2));
+  } catch (e) {
+    console.error(`Error processing game ID ${gid}: ${e.message}`);
+    fs.writeFileSync(`${dir}/${gid}.json`, JSON.stringify({ error: e.message }));
   }
 }
