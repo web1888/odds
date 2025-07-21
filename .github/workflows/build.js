@@ -14,9 +14,9 @@ for (const gid of gameIds) {
     const $ = cheerio.load(html);
     const t = $('tr[data-companyid="8"]').find('td');
     const data = {
-      1x2: { home: +t.eq(2).text(), draw: +t.eq(3).text(), away: +t.eq(4).text() },
-      ah:  { line: +t.eq(7).text(), home: +t.eq(8).text(), away: +t.eq(9).text() },
-      ou:  { line: +t.eq(10).text(), over: +t.eq(11).text(), under: +t.eq(12).text() }
+      "1x2": { home: parseFloat(t.eq(2).text()), draw: parseFloat(t.eq(3).text()), away: parseFloat(t.eq(4).text()) },
+      "ah":  { line: parseFloat(t.eq(7).text()), home: parseFloat(t.eq(8).text()), away: parseFloat(t.eq(9).text()) },
+      "ou":  { line: parseFloat(t.eq(10).text()), over: parseFloat(t.eq(11).text()), under: parseFloat(t.eq(12).text()) }
     };
     fs.writeFileSync(`${dir}/${gid}.json`, JSON.stringify(data, null, 2));
   } catch (e) {
